@@ -6,12 +6,6 @@
   become: true
   gather_facts: false
   tasks:
-    - name: What if we use yum_repository?
-      yum_repository:
-        baseurl: 'https://dl.fedoraproject.org/pub/epel/7Server/x86_64/'
-        description: Epel release.
-        name: epel-release
-        state: present
     - name: install python pip
       yum:
         name: python-pip
