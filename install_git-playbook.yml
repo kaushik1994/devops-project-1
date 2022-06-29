@@ -1,0 +1,12 @@
+  ---
+- name: Install git in target node with ansible
+  hosts: servers
+  gather_facts: False
+  vars:
+    - packages: ["git"]
+  tasks:
+    - name: Installing {{ packages }} on {{ hostname }}
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items: "{{ packages }}"
