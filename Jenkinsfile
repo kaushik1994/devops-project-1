@@ -30,8 +30,8 @@ pipeline {
         }
         stage('test ansible') {
             steps {
-                ansiblePlaybook becomeUser: 'ansibleadmin', disableHostKeyChecking: false, inventory: 'servers', playbook: 'install_python-playbook.yml', extras: '-vvv', extraVars: [usr: "ansibleuser"]
-            }
+ansiblePlaybook inventory: 'servers', playbook: 'install_python-playbook.yml'
+	    }
         }
         stage('Install Python 3') {
             steps {
