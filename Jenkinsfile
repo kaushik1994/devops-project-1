@@ -30,17 +30,17 @@ pipeline {
         }
         stage('test ansible') {
             steps {
-                ansiblePlaybook becomeUser: 'ansibleadmin', disableHostKeyChecking: false, inventory: 'servers', playbook: 'install_python-playbook.yml'
+                ansiblePlaybook becomeUser: 'ansibleadmin', disableHostKeyChecking: false, inventory: 'servers', playbook: 'install_python-playbook.yml', extras: '-vvv', extraVars: [usr: "ansibleuser"]
             }
         }
         stage('Install Python 3') {
             steps {
-               ansiblePlaybook disableHostKeyChecking: false, installation: 'ansible', inventory: 'servers', playbook: 'install_python-playbook.yml'
+               ansiblePlaybook disableHostKeyChecking: false, installation: 'ansible', inventory: 'servers', playbook: 'install_python-playbook.yml', extras: '-vvv', extraVars: [usr: "ansibleuser"]
             }
         }
          stage('Deploy') {
             steps {
-               ansiblePlaybook disableHostKeyChecking: false, installation: 'ansible', inventory: 'servers', playbook: 'deployment-playbook.yml'
+               ansiblePlaybook disableHostKeyChecking: false, installation: 'ansible', inventory: 'servers', playbook: 'deployment-playbook.yml', extras: '-vvv', extraVars: [usr: "ansibleuser"]
             }
         }
     }
