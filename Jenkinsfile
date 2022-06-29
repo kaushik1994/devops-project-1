@@ -28,14 +28,19 @@ pipeline {
                 sh "docker-compose push"
             }
         }
+        stage('test ansible') {
+            steps {
+                ansiblePlaybook becomeUser: 'ansibleadmin', credentialsId: 'server-ansible', disableHostKeyChecking: true, inventory: 'servers', playbook: 'install_python-playbook.yml'
+            }
+        }
         stage('Install Python 3') {
             steps {
-               ansiblePlaybook credentialsId: 'server-ansible', installation: 'ansible', inventory: 'servers', playbook: 'install_python-playbook.yml'
+               ansiblePlaybook credentialsId: 'server-ansible', disableHostKeyChecking: true, installation: 'ansible', inventory: 'servers', playbook: 'install_python-playbook.yml'
             }
         }
          stage('Deploy') {
             steps {
-               ansiblePlaybook credentialsId: 'server-ansible', installation: 'ansible', inventory: 'servers', playbook: 'deployment-playbook.yml'
+               ansiblePlaybook credentialsId: 'server-ansible', disableHostKeyChecking: true, installation: 'ansible', inventory: 'servers', playbook: 'deployment-playbook.yml'
             }
         }
     }
