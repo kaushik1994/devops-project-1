@@ -2,7 +2,7 @@
 #Ansible Playbook to build and run a Docker container
  
 - name: Playbook to build and run Docker
-  hosts: servers
+  hosts: test_servers
   become: true
   gather_facts: false
 

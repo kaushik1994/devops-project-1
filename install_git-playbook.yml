@@ -1,6 +1,6 @@
   ---
 - name: Install git in target node with ansible
-  hosts: servers
+  hosts: test_servers
   gather_facts: False
   vars:
     - packages: ["git"]
