@@ -30,12 +30,14 @@ pipeline {
         }
         stage('Install Python 3') {
             steps {
-               ansiblePlaybook disableHostKeyChecking: false, installation: 'ansible', inventory: 'servers', playbook: 'install_python-playbook.yml'
+		ansiblePlaybook credentialsId: 'server-ansible', disableHostKeyChecking: true, inventory: 'servers', playbook: 'install_python-playbook.yml'
+
             }
         }
          stage('Deploy') {
             steps {
-               ansiblePlaybook disableHostKeyChecking: false, installation: 'ansible', inventory: 'servers', playbook: 'deployment-playbook.yml'
+		ansiblePlaybook credentialsId: 'server-ansible', disableHostKeyChecking: true, inventory: 'servers', playbook: 'deployment-playbook.yml'
+
             }
         }
     }
