@@ -5,50 +5,43 @@
   hosts: test_servers
   become: true
   gather_facts: false
-
   tasks:
-   - name: What if we use yum_repository?
-     yum_repository:
-       baseurl: https://dl.fedoraproject.org/pub/epel/7Server/x86_64/
-       description: "Epel release."
-       name: epel-release
-       state: present
-    
+    - name: What if we use yum_repository?
+      yum_repository:
+        baseurl: 'https://dl.fedoraproject.org/pub/epel/7Server/x86_64/'
+        description: Epel release.
+        name: epel-release
+        state: present
     - name: install python pip
       yum:
         name: python-pip
         state: present
-
     - name: install docker
       yum:
         name: docker
         state: present
-
     - name: start docker
       service:
         name: docker
         state: started
-        enabled: yes
-
+        enabled: 'yes'
     - name: install docker-py python module
       pip:
         name: docker-py
         state: present
-
     - name: install docker from python pip
       pip:
         name: docker
       vars:
         ansible_python_interpreter: /usr/bin/python3
-
     - name: Run Docker container using php-demo-website
       docker_container:
         name: php-demo-website
         image: 7100071/devops
         state: started
-        recreate: yes
+        recreate: 'yes'
         detach: true
         ports:
-          - "80:80"
+          - '80:80'
       vars:
         ansible_python_interpreter: /usr/bin/python3
