@@ -9,7 +9,7 @@ Devops Certification project-1
     - created script.sh file in [node server] inside /home/ubantu folder
     - Go to  /etc/ansible folder,
     - run command `ansible-playbook -i servers install_python-playbook.yml`
-
+    
 [node_server]
     - created script.sh file inside /home/ubantu folder as mention in above [main server] paython3 installation step
 
