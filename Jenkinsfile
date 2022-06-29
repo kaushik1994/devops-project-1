@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Build'){
             steps {
-                sh "docker build . -t 7100071/devops" docker push 7100071/devops:tagname
+                sh "docker build . -t 7100071/devops"
             }
         }
         stage('Docker Login') {
