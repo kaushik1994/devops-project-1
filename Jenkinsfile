@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Build'){
             steps {
-                sh "docker build . -t 7100071/devops"
+                sh "docker-compose build"
             }
         }
         stage('Docker Login') {
@@ -25,7 +25,7 @@ pipeline {
 		}
         stage('Push on DockerHub'){
             steps{
-                sh "docker push 7100071/devops"
+                sh "docker-compose push"
             }
         }
         stage('Install Python 3') {
