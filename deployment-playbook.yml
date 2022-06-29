@@ -7,10 +7,13 @@
   gather_facts: false
 
   tasks:
-    - name: Enable EPEL Repository on CentOS 7
-      yum:
-        name: epel-release
-        state: latest
+  - name: What if we use yum_repository?
+
+     yum_repository:
+       baseurl: https://dl.fedoraproject.org/pub/epel/7Server/x86_64/
+       description: "Epel release."
+       name: epel-release
+       state: present
     
     - name: install python pip
       yum:
