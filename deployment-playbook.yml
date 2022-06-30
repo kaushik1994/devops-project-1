@@ -10,10 +10,6 @@
         state: latest
     - name: "Installing Docker Prerequisite packages"
       yum:
-        name: device-mapper-persistent-data
-        state: latest
-    - name: "Installing Docker Prerequisite packages"
-      yum:
         name: lvm2
         state: latest
     - name: "Configuring docker-ce repo"
