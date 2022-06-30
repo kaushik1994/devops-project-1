@@ -1,33 +1,41 @@
 ---
-#Ansible Playbook to build and run a Docker container
- 
-- name: Playbook to build and run Docker
-  hosts: test_servers
+- name: install Docker
+  hosts: all
   become: true
-  gather_facts: false
   tasks:
-    - name: install python pip
-      yum:
-        name: python-pip
+    - name: set mydistribution
+      ansible.builtin.set_fact:
+        mydistribution: "{{ 'rhel' if (ansible_distribution == 'Red Hat Enterprise Linux') else (ansible_distribution | lower) }}"
+
+    - name: Add signing key
+      ansible.builtin.rpm_key:
+        key: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
         state: present
-    - name: install docker
-      yum:
+
+    - name: Add repository into repo.d list
+      ansible.builtin.yum_repository:
         name: docker
-        state: present
-    - name: start docker
-      service:
-        name: docker
+        description: docker repository
+        baseurl: "https://download.docker.com/linux/{{ mydistribution }}/$releasever/$basearch/stable"
+        enabled: true
+        gpgcheck: true
+        gpgkey: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
+
+    - name: Install Docker
+      ansible.builtin.yum:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: latest
+        update_cache: true
+
+    - name: Start Docker
+      ansible.builtin.service:
+        name: "docker"
+        enabled: true
         state: started
-        enabled: 'yes'
-    - name: install docker-py python module
-      pip:
-        name: docker-py
-        state: present
-    - name: install docker from python pip
-      pip:
-        name: docker
-      vars:
-        ansible_python_interpreter: /usr/bin/python3
+
     - name: Run Docker container using php-demo-website
       docker_container:
         name: php-demo-website
@@ -37,5 +45,3 @@
         detach: true
         ports:
           - '80:80'
-      vars:
-        ansible_python_interpreter: /usr/bin/python3
