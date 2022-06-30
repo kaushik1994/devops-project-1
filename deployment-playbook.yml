@@ -1,47 +1,38 @@
 ---
-- name: install Docker
-  hosts: all
-  become: true
+- name: Playbook to build and run Docker
+  hosts: cent7-node-1
+  user: ansible
+  become: yes
   tasks:
-    - name: set mydistribution
-      ansible.builtin.set_fact:
-        mydistribution: "{{ 'rhel' if (ansible_distribution == 'Red Hat Enterprise Linux') else (ansible_distribution | lower) }}"
-
-    - name: Add signing key
-      ansible.builtin.rpm_key:
-        key: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
-        state: present
-
-    - name: Add repository into repo.d list
-      ansible.builtin.yum_repository:
-        name: docker
-        description: docker repository
-        baseurl: "https://download.docker.com/linux/{{ mydistribution }}/$releasever/$basearch/stable"
-        enabled: true
-        gpgcheck: true
-        gpgkey: "https://download.docker.com/linux/{{ mydistribution }}/gpg"
-
-    - name: Install Docker
-      ansible.builtin.yum:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
+    - name: "Installing Docker Prerequisite packages"
+      yum:
+        name: "{{ item }}"
         state: latest
-        update_cache: true
-
-    - name: Start Docker
-      ansible.builtin.service:
-        name: "docker"
-        enabled: true
+        with_items:
+          - yum-utils
+          - device-mapper-persistent-data
+          - lvm2
+    - name: "Configuring docker-ce repo"
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+        mode: 0644
+    - name: " Installing Docker latest version"
+      yum:
+        name: docker-ce
+        state: present
+    - name: " Starting and Enabling Docker service"
+      service:
+        name: docker
         state: started
+        enabled: yes
 
     - name: Run Docker container using php-demo-website
       docker_container:
         name: php-demo-website
         image: 7100071/devops
         state: started
-        recreate: 'yes'
+        recreate: "yes"
         detach: true
         ports:
-          - '80:80'
+          - "80:80"
