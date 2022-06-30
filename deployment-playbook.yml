@@ -1,6 +1,6 @@
 ---
 - name: Playbook to build and run Docker
-  hosts: cent7-node-1
+  hosts: test_servers
   user: ansible
   become: yes
   tasks:
